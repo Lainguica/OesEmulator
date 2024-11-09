@@ -1,7 +1,5 @@
-package main
-
+package OES
 import rl "vendor:raylib"
-import "bus"
 
 // Default NES resolution
 WINDOW_WIDTH :: 256
@@ -18,6 +16,6 @@ main :: proc() {
         
         rl.EndDrawing()
     }
-    
-    bus.initRam()
+
+    bus_InitRam()
 }
