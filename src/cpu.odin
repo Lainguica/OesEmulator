@@ -10,6 +10,13 @@ cpu_Write :: proc(addr: u16 ,data: u8) {
     bus_Write(addr, data)
 }
 
+cpu_SetFlag :: proc(flag: CPU_FLAGS, value: bool) {
+
+}
+cpu_GetFlag :: proc(flag: CPU_FLAGS) {
+
+}
+
 /*  
     NVUB DIZC
     ││││ ││││
@@ -33,3 +40,13 @@ CPU_FLAGS :: enum {
     V = 1 << 6, // Overflow
     N = 1 << 7, // Negative
 }
+// CPU registers
+CPU_REGISTERS :: struct {
+    A: u8,  // Accumulator Register
+    X: u8,  // X Register
+    Y: u8,  // Y Register
+    SP: u8, // Stack Pointer
+    PC: u16, // Program Counter
+    S: u8,  // Status Register
+}
+register := CPU_REGISTERS{} //Initialize to Zero
