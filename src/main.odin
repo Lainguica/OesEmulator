@@ -1,6 +1,7 @@
 package main
 
 import rl "vendor:raylib"
+import "bus"
 
 // Default NES resolution
 WINDOW_WIDTH :: 256
@@ -9,12 +10,14 @@ windowScale: i32 = 3
 
 main :: proc() {
     rl.InitWindow(WINDOW_WIDTH * windowScale, WINDOW_HEIGHT * windowScale, "OES Emulator")
-
+    
     for !rl.WindowShouldClose(){
         rl.BeginDrawing()
-
-            rl.ClearBackground(rl.WHITE)
-
+        
+        rl.ClearBackground(rl.WHITE)
+        
         rl.EndDrawing()
     }
+    
+    bus.initRam()
 }
