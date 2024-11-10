@@ -148,6 +148,7 @@ is := INSTRUCTION_SET{}
 // www.nesdev.org/obelisk-6502-guide/reference.html
 // Instruction set OP code Matrix
 OPMatrix := [256] INSTRUCTION_SET {
+    0xFF = {CPU_OPCODES, CPU_ADDR_MODE, 0, 0},
     0x69 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.Immediate, 2, 2},
     0x65 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.ZeroPage, 2, 3},
     0x75 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.ZeroPageX, 2, 4},
@@ -189,6 +190,11 @@ OPMatrix := [256] INSTRUCTION_SET {
     0xD8 = {CPU_OPCODES.CLD, CPU_ADDR_MODE.Implied, 1, 2},
     0x58 = {CPU_OPCODES.CLI, CPU_ADDR_MODE.Implied, 1, 2},
     0xB8 = {CPU_OPCODES.CLV, CPU_ADDR_MODE.Implied, 1, 2},
+    0xCA = {CPU_OPCODES.DEX, CPU_ADDR_MODE.Implied, 1, 2},
+    0x88 = {CPU_OPCODES.DEY, CPU_ADDR_MODE.Implied, 1, 2},
+    0xE8 = {CPU_OPCODES.INX, CPU_ADDR_MODE.Implied, 1, 2},
+    0xC8 = {CPU_OPCODES.INY, CPU_ADDR_MODE.Implied, 1, 2},
+
 
     0xC9 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.Immediate, 2, 2},
     0xC5 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.ZeroPage, 2, 3},
@@ -211,7 +217,47 @@ OPMatrix := [256] INSTRUCTION_SET {
     0xD6 = {CPU_OPCODES.DEC, CPU_ADDR_MODE.ZeroPageX, 2, 6},
     0xCE = {CPU_OPCODES.DEC, CPU_ADDR_MODE.Absolute, 3, 6},
     0xDE = {CPU_OPCODES.DEC, CPU_ADDR_MODE.AbsoluteX, 3, 7},
+
+    0x49 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.Immediate, 2, 2},
+    0x45 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0x55 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0x4D = {CPU_OPCODES.EOR, CPU_ADDR_MODE.Absolute, 3, 4},
+    0x5D = {CPU_OPCODES.EOR, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+    0x59 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+    0x41 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.IndirectX, 2, 6},
+    0x51 = {CPU_OPCODES.EOR, CPU_ADDR_MODE.IndirectY, 2, 5},
+
+    0xE6 = {CPU_OPCODES.INC, CPU_ADDR_MODE.ZeroPage, 2, 5},
+    0xF6 = {CPU_OPCODES.INC, CPU_ADDR_MODE.ZeroPageX, 2, 6},
+    0xEE = {CPU_OPCODES.INC, CPU_ADDR_MODE.Absolute, 3, 6},
+    0xFE = {CPU_OPCODES.INC, CPU_ADDR_MODE.AbsoluteY, 3, 7},
+
+    0x4C = {CPU_OPCODES.JMP, CPU_ADDR_MODE.Absolute, 3, 3},
+    0x6C = {CPU_OPCODES.JMP, CPU_ADDR_MODE.Indirect, 3, 5},
     
+    0x20 = {CPU_OPCODES.JSR, CPU_ADDR_MODE.Absolute, 3, 6},
+
+    0xA9 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xA5 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xB5 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0xAD = {CPU_OPCODES.LDA, CPU_ADDR_MODE.Absolute, 3, 4},
+    0xBD = {CPU_OPCODES.LDA, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+    0xB9 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+    0xA1 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.IndirectX, 2, 6},
+    0xB1 = {CPU_OPCODES.LDA, CPU_ADDR_MODE.IndirectY, 2, 5},
+
+    0xA2 = {CPU_OPCODES.LDX, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xA6 = {CPU_OPCODES.LDX, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xB6 = {CPU_OPCODES.LDX, CPU_ADDR_MODE.ZeroPageY, 2, 4},
+    0xAE = {CPU_OPCODES.LDX, CPU_ADDR_MODE.Absolute, 3, 4},
+    0xBE = {CPU_OPCODES.LDX, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+
+    0xA0 = {CPU_OPCODES.LDY, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xA4 = {CPU_OPCODES.LDY, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xB4 = {CPU_OPCODES.LDY, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0xAC = {CPU_OPCODES.LDY, CPU_ADDR_MODE.Absolute, 3, 4},
+    0xBC = {CPU_OPCODES.LDY, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+
 }
 
 
