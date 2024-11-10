@@ -102,7 +102,7 @@ register := CPU_REGISTERS{} //Initialize to Zero
 
 // 6502 Addressing Modes - www.nesdev.org/obelisk-6502-guide/addressing.html
 CPU_ADDR_MODE :: enum {
-    Implicit,
+    Implied,
     Accumulator,
     Immediate,
     ZeroPage,
@@ -113,8 +113,8 @@ CPU_ADDR_MODE :: enum {
     AbsoluteX,
     AbsoluteY,
     Indirect,
-    IndexedIndirect,
-    IndirectIndexed
+    IndirectX,
+    IndirectY,
 }
 
 // 6502 Opcodes - www.nesdev.org/obelisk-6502-guide/instructions.html
@@ -137,6 +137,82 @@ CPU_OPCODES :: enum {
 
 // Bruh
 INSTRUCTION_SET :: struct {
-
+    O: CPU_OPCODES,      // OP Code 
+    A: CPU_ADDR_MODE,    // Addressing Mode 
+    I: i8,               // Instruction Bytes 
+    C: i8,               // Cycles
 }
+// Instruction Set
+is := INSTRUCTION_SET{}
+//0x00 = {CPU_OPCODES, CPU_ADDR_MODE, 0, 0},
+// www.nesdev.org/obelisk-6502-guide/reference.html
+// Instruction set OP code Matrix
+OPMatrix := [256] INSTRUCTION_SET {
+    0x69 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.Immediate, 2, 2},
+    0x65 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0x75 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0x6D = {CPU_OPCODES.ADC, CPU_ADDR_MODE.Absolute, 3, 4},
+    0x7D = {CPU_OPCODES.ADC, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+    0x79 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+    0x61 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.IndirectX, 2, 6},
+    0x71 = {CPU_OPCODES.ADC, CPU_ADDR_MODE.IndirectX, 2, 5},
+
+    0x29 = {CPU_OPCODES.AND, CPU_ADDR_MODE.Immediate, 2, 2},
+    0x25 = {CPU_OPCODES.AND, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0x35 = {CPU_OPCODES.AND, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0x2D = {CPU_OPCODES.AND, CPU_ADDR_MODE.Absolute, 3, 4},
+    0x3D = {CPU_OPCODES.AND, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+    0x39 = {CPU_OPCODES.AND, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+    0x21 = {CPU_OPCODES.AND, CPU_ADDR_MODE.IndirectX, 2, 6},
+    0x31 = {CPU_OPCODES.AND, CPU_ADDR_MODE.IndirectY, 2, 5},
+
+    0x0A = {CPU_OPCODES.ASL, CPU_ADDR_MODE.Accumulator, 1, 2},
+    0x06 = {CPU_OPCODES.ASL, CPU_ADDR_MODE.ZeroPage, 2, 5},
+    0x16 = {CPU_OPCODES.ASL, CPU_ADDR_MODE.ZeroPageX, 2, 6},
+    0x0E = {CPU_OPCODES.ASL, CPU_ADDR_MODE.Absolute, 3, 6},
+    0x13 = {CPU_OPCODES.ASL, CPU_ADDR_MODE.AbsoluteX, 3, 7},
+
+    0x90 = {CPU_OPCODES.BCC, CPU_ADDR_MODE.Relative, 2, 2},
+    0xB0 = {CPU_OPCODES.BCS, CPU_ADDR_MODE.Relative, 2, 2},
+    0xF0 = {CPU_OPCODES.BEQ, CPU_ADDR_MODE.Relative, 2, 2},
+    0x30 = {CPU_OPCODES.BMI, CPU_ADDR_MODE.Relative, 2, 2},
+    0xD0 = {CPU_OPCODES.BNE, CPU_ADDR_MODE.Relative, 2, 2},
+    0x10 = {CPU_OPCODES.BPL, CPU_ADDR_MODE.Relative, 2, 2},
+    0x50 = {CPU_OPCODES.BVC, CPU_ADDR_MODE.Relative, 2, 2},
+    0x70 = {CPU_OPCODES.BVS, CPU_ADDR_MODE.Relative, 2, 2},
+
+    0x24 = {CPU_OPCODES.BIT, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0x26 = {CPU_OPCODES.BIT, CPU_ADDR_MODE.ZeroPage, 3, 4},
+
+    0x00 = {CPU_OPCODES.BRK, CPU_ADDR_MODE.Implied, 1, 7},
+    0x18 = {CPU_OPCODES.CLC, CPU_ADDR_MODE.Implied, 1, 2},  
+    0xD8 = {CPU_OPCODES.CLD, CPU_ADDR_MODE.Implied, 1, 2},
+    0x58 = {CPU_OPCODES.CLI, CPU_ADDR_MODE.Implied, 1, 2},
+    0xB8 = {CPU_OPCODES.CLV, CPU_ADDR_MODE.Implied, 1, 2},
+
+    0xC9 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xC5 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xD5 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.ZeroPageX, 2, 4},
+    0xCD = {CPU_OPCODES.CMP, CPU_ADDR_MODE.Absolute, 3, 4},
+    0xDD = {CPU_OPCODES.CMP, CPU_ADDR_MODE.AbsoluteX, 3, 4},
+    0xD9 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.AbsoluteY, 3, 4},
+    0xC1 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.IndirectX, 2, 6},
+    0xD1 = {CPU_OPCODES.CMP, CPU_ADDR_MODE.IndirectY, 2, 5},
+
+    0xE0 = {CPU_OPCODES.CPX, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xE4 = {CPU_OPCODES.CPX, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xEC = {CPU_OPCODES.CPX, CPU_ADDR_MODE.Absolute, 3, 4},
+
+    0xC0 = {CPU_OPCODES.CPY, CPU_ADDR_MODE.Immediate, 2, 2},
+    0xC4 = {CPU_OPCODES.CPY, CPU_ADDR_MODE.ZeroPage, 2, 3},
+    0xCC = {CPU_OPCODES.CPY, CPU_ADDR_MODE.Absolute, 3, 4},
+
+    0xC6 = {CPU_OPCODES.DEC, CPU_ADDR_MODE.ZeroPage, 2, 5},
+    0xD6 = {CPU_OPCODES.DEC, CPU_ADDR_MODE.ZeroPageX, 2, 6},
+    0xCE = {CPU_OPCODES.DEC, CPU_ADDR_MODE.Absolute, 3, 6},
+    0xDE = {CPU_OPCODES.DEC, CPU_ADDR_MODE.AbsoluteX, 3, 7},
+    
+}
+
+
 
