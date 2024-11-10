@@ -1,21 +1,67 @@
 package OES
 
+fetched: u8         // Represents the working input value to the ALU
+temp:u16            // A convenience variable used everywhere
+addr_abs: u16       // All used memory addresses end up in here
+addr_rel: u16       // Represents absolute address following a branch
+opcode: u8          // Is the instruction byte
+cycles: u8          // Counts how many cycles the instruction has remaining
+clock_count: u32    // A global accumulation of the number of clocks
+
+
 // Reads an 8-bit byte from the bus, located at the specified 16-bit memory address.
 cpu_Read :: proc(addr: u16) -> u8 {
     return bus_Read(addr, false)
 }
+
 
 // Writes a byte to the bus at the specified memory address.
 cpu_Write :: proc(addr: u16 ,data: u8) {
     bus_Write(addr, data)
 }
 
+
+// Set the CPU_FLAGS from the Status Register
 cpu_SetFlag :: proc(flag: CPU_FLAGS, value: bool) {
 
 }
-cpu_GetFlag :: proc(flag: CPU_FLAGS) {
 
+
+// Get the CPU_FLAGS from the Status Register
+cpu_GetFlag :: proc(flag: CPU_FLAGS) -> u16 {
+    return 0 // TODO
 }
+
+
+// Perform one clock cycle's worth of update
+cpu_clock :: proc() {
+    
+}
+
+
+// Reset Interrupt - Forces CPU into known state
+cpu_reset :: proc() {
+    
+}
+
+
+// Interrupt Request - Executes an instruction at a specific location
+cpu_irq :: proc() {
+    
+}
+
+
+// Non-Maskable Interrupt Request - Executes an instruction at a specific location, 
+//but cannot be disabled
+cpu_nmi :: proc() {
+    
+}
+
+cpu_fetch :: proc() -> u8 {
+    return 0 // todo
+}
+// Represents the working input value to the ALU
+
 
 /*  
     NVUB DIZC
@@ -40,6 +86,7 @@ CPU_FLAGS :: enum {
     V = 1 << 6, // Overflow
     N = 1 << 7, // Negative
 }
+
 // CPU registers
 CPU_REGISTERS :: struct {
     A: u8,  // Accumulator Register
@@ -50,3 +97,5 @@ CPU_REGISTERS :: struct {
     S: u8,  // Status Register
 }
 register := CPU_REGISTERS{} //Initialize to Zero
+
+//Addressing Modes
