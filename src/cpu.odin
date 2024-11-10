@@ -57,10 +57,10 @@ cpu_nmi :: proc() {
     
 }
 
+
 cpu_fetch :: proc() -> u8 {
     return 0 // todo
 }
-// Represents the working input value to the ALU
 
 
 /*  
@@ -87,6 +87,7 @@ CPU_FLAGS :: enum {
     N = 1 << 7, // Negative
 }
 
+
 // CPU registers
 CPU_REGISTERS :: struct {
     A: u8,  // Accumulator Register
@@ -98,4 +99,44 @@ CPU_REGISTERS :: struct {
 }
 register := CPU_REGISTERS{} //Initialize to Zero
 
-//Addressing Modes
+
+// 6502 Addressing Modes - www.nesdev.org/obelisk-6502-guide/addressing.html
+CPU_ADDR_MODE :: enum {
+    Implicit,
+    Accumulator,
+    Immediate,
+    ZeroPage,
+    ZeroPageX,
+    ZeroPageY,
+    Relative,
+    Absolute,
+    AbsoluteX,
+    AbsoluteY,
+    Indirect,
+    IndexedIndirect,
+    IndirectIndexed
+}
+
+// 6502 Opcodes - www.nesdev.org/obelisk-6502-guide/instructions.html
+CPU_OPCODES :: enum {
+     ADC,   AND,  ASL,  BCC,
+	 BCS,   BEQ,  BIT,  BMI,
+	 BNE,   BPL,  BRK,  BVC,
+	 BVS,   CLC,  CLD,  CLI,
+	 CLV,   CMP,  CPX,  CPY,
+	 DEC,   DEX,  DEY,  EOR,
+	 INC,   INX,  INY,  JMP,
+	 JSR,   LDA,  LDX,  LDY,
+	 LSR,   NOP,  ORA,  PHA,
+	 PHP,   PLA,  PLP,  ROL,
+	 ROR,   RTI,  RTS,  SBC,
+	 SEC,   SED,  SEI,  STA,
+	 STX,   STY,  TAX,  TAY,
+	 TSX,   TXA,  TXS,  TYA,
+}
+
+// Bruh
+INSTRUCTION_SET :: struct {
+
+}
+
