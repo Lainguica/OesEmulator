@@ -364,7 +364,8 @@ addrMode_ZeroPageY :: proc () -> u8 {
     return 0 
 }
 
-// A full 16-bit address is loaded and used
+
+// A full 16-bit address is loaded and used 
 addrMode_Absolute :: proc () -> u8 {
     lo := cpu_Read(_registers.PC)
     _registers.PC += 1 
@@ -374,4 +375,42 @@ addrMode_Absolute :: proc () -> u8 {
     _addr_abs = u16((hi << 8 ) | lo)
 
     return 0
+}
+
+// A full 16-bit address with X Offset is loaded and used 
+addrMode_AbsoluteX :: proc () -> u8 {
+    lo := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+    hi := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+
+    _addr_abs = u16((hi << 8 ) | lo)
+    _addr_abs += u16(_registers.X)
+
+    // If the resulting address changes the page, 
+    // an additional clock cycle is required
+    if (_addr_abs & 0xFF00) != u16((hi << 8)){
+        return 1 
+    } else {
+        return 0
+    }
+}
+
+// A full 16-bit address with Y Offset is loaded and used 
+addrMode_AbsoluteY :: proc () -> u8 {
+    lo := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+    hi := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+
+    _addr_abs = u16((hi << 8 ) | lo)
+    _addr_abs += u16(_registers.Y)
+
+    // If the resulting address changes the page, 
+    // an additional clock cycle is required
+    if (_addr_abs & 0xFF00) != u16((hi << 8)){
+        return 1 
+    } else {
+        return 0
+    }
 }
