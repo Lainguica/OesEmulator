@@ -1,12 +1,12 @@
 package OES
 
-fetched: u8         // Represents the working input value to the ALU
-temp:u16            // A convenience variable used everywhere
-addr_abs: u16       // All used memory addresses end up in here
-addr_rel: u16       // Represents absolute address following a branch
-opcode: u8          // Is the instruction byte
-cycles: u8          // Counts how many cycles the instruction has remaining
-clock_count: u32    // A global accumulation of the number of clocks
+_fetched: u8         // Represents the working input value to the ALU
+_temp:u16            // A convenience variable used everywhere
+_addr_abs: u16       // All used memory addresses end up in here
+_addr_rel: u16       // Represents absolute address following a branch
+_opcode: u8          // Is the instruction byte
+_cycles: u8          // Counts how many cycles the instruction has remaining
+_clock_count: u32    // A global accumulation of the number of clocks
 
 
 // Reads an 8-bit byte from the bus, located at the specified 16-bit memory address.
@@ -299,9 +299,6 @@ OPMatrix := [256] INSTRUCTION_SET {
     0xF9 = {CPU_OPCODES.SBC, CPU_ADDR_MODE.AbsoluteY, 3, 4},
     0xFD = {CPU_OPCODES.SBC, CPU_ADDR_MODE.AbsoluteX, 3, 4},
     0xFE = {CPU_OPCODES.INC, CPU_ADDR_MODE.AbsoluteY, 3, 7},
-
-
-
 }
 
 
