@@ -35,7 +35,23 @@ cpu_GetFlag :: proc(flag: CPU_FLAGS) -> u16 {
 
 // Perform one clock cycle's worth of update
 cpu_clock :: proc() {
-    
+    if _cycles == 0 {
+        //  Read next instruction byte
+        _opcode = cpu_Read(_registers.PC)
+        _registers.PC += 1
+
+        // Get the instruction number of CYCLES
+        _cycles = OPMatrix[0x00].CYCLES
+
+        // TODO Call the funcion of that opmatrix
+        // IDK how i gonna do, but i'm need to eb creative
+
+        // TODO https://youtu.be/8XmxKPJDGU0?t=1793 implement in this timestap, the addicional
+        // clock cycles need for specific instructions
+    }
+
+    // Decrement 1 Cycle
+    _cycles -= 1 
 }
 
 
@@ -97,7 +113,7 @@ CPU_REGISTERS :: struct {
     PC: u16, // Program Counter
     S: u8,  // Status Register
 }
-register := CPU_REGISTERS{} //Initialize to Zero
+_registers := CPU_REGISTERS{} //Initialize to Zero
 
 
 // 6502 Addressing Modes - www.nesdev.org/obelisk-6502-guide/addressing.html
@@ -139,8 +155,8 @@ CPU_OPCODES :: enum {
 INSTRUCTION_SET :: struct {
     O: CPU_OPCODES,      // OP Code 
     A: CPU_ADDR_MODE,    // Addressing Mode 
-    I: i8,               // Instruction Bytes 
-    C: i8,               // Cycles
+    INS_BYTES: u8,               // Instruction Bytes 
+    CYCLES: u8,               // Cycles
 }
 // Instruction Set
 is := INSTRUCTION_SET{}
@@ -300,6 +316,4 @@ OPMatrix := [256] INSTRUCTION_SET {
     0xFD = {CPU_OPCODES.SBC, CPU_ADDR_MODE.AbsoluteX, 3, 4},
     0xFE = {CPU_OPCODES.INC, CPU_ADDR_MODE.AbsoluteY, 3, 7},
 }
-
-
 
