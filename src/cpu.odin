@@ -317,3 +317,61 @@ OPMatrix := [256] INSTRUCTION_SET {
     0xFE = {CPU_OPCODES.INC, CPU_ADDR_MODE.AbsoluteY, 3, 7},
 }
 
+
+/*------------------------ADDRESSING MODE------------------------*/
+
+
+// Nothing Happen and Feijoada
+addrMode_Implied :: proc () -> u8 {
+    _fetched = _registers.A
+    return 0 
+}
+
+
+// The instruction expects the next byte to be used as a value, so we'll prep
+// the read address to point to the next byte
+addrMode_Immediate :: proc () -> u8 {
+    _addr_abs = _registers.PC + 1 // TODO, this coud be an function to increment the program counter
+    return 0 
+}
+
+
+// To save program bytes, zero page addressing allows you to absolutely address
+// a location in first 0xFF bytes of address range. Clearly this only requires
+// one byte instead of the usual two.
+addrMode_ZeroPage :: proc () -> u8 {
+    _addr_abs = u16(cpu_Read(_registers.PC))
+    _registers.PC += 1 
+    _addr_abs = 0x00FF
+    return 0 
+}
+
+
+// Same as zero page but with X Register for offset
+addrMode_ZeroPageX :: proc () -> u8 {
+    _addr_abs = u16(cpu_Read(_registers.PC) + _registers.X)
+    _registers.PC += 1 
+    _addr_abs = 0x00FF
+    return 0 
+}
+
+
+// Same as zero page but with y Register for offset
+addrMode_ZeroPageY :: proc () -> u8 {
+    _addr_abs = u16(cpu_Read(_registers.PC) + _registers.Y)
+    _registers.PC += 1 
+    _addr_abs = 0x00FF
+    return 0 
+}
+
+// A full 16-bit address is loaded and used
+addrMode_Absolute :: proc () -> u8 {
+    lo := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+    hi := cpu_Read(_registers.PC)
+    _registers.PC += 1 
+
+    _addr_abs = u16((hi << 8 ) | lo)
+
+    return 0
+}
